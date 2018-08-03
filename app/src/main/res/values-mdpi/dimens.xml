@@ -1,0 +1,6 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="progress_spin_size">20dp</dimen>
+    <dimen name="play_btn_size">23dp</dimen>
+
+</resources>

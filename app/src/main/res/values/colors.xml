@@ -1,0 +1,17 @@
+<resources>
+
+    <color name="dialog_bg">@android:color/white</color>
+    <color name="transparent">#00000000</color>
+    <color name="blur">#aaffffff</color>
+    <color name="overlay">#66000000</color>
+    <color name="white">#fefefe</color>
+    <color name="black">#000000</color>
+    <color name="light_grey">#e1e1e1</color>
+    <color name="dark_grey">#888888</color>
+    <color name="light_green">#55ff56</color>
+    <color name="dark_green">#22aa22</color>
+    <color name="red">#ff3322</color>
+
+    <color name="plaza_primary">#652d86</color>
+    <color name="plaza_secondary">#00b48c</color>
+</resources>

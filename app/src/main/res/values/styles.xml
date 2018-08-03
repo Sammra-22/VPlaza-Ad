@@ -1,0 +1,22 @@
+<resources>
+
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppBaseTheme.ActionBarStyle" parent="android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:icon">@drawable/icon</item>
+    </style>
+
+
+    <style name="MyProgressStyle" parent="@android:style/Widget.ProgressBar">
+        <item name="android:colorForeground">@color/white</item>
+        <item name="android:colorBackground">@color/plaza_primary</item>
+    </style>
+
+</resources>
