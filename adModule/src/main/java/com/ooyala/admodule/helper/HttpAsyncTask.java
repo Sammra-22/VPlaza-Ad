@@ -3,8 +3,8 @@ package com.ooyala.admodule.helper;
 import android.os.AsyncTask;
 import android.util.Log;
 
-
 import com.ooyala.admodule.model.Ad;
+
 import org.xml.sax.SAXException;
 
 import java.io.BufferedInputStream;
@@ -22,15 +22,14 @@ import javax.xml.parsers.SAXParserFactory;
  * Created by Sam22 on 06/20/15.
  */
 public abstract class HttpAsyncTask extends AsyncTask<String, Void, Ad> {
-    protected enum Task{GET_AD, FIRE_PIXEL}
-    Task mTask;
+    private Task mTask;
 
-    protected void setTask(Task task){mTask = task;}
-
+    protected void setTask(Task task) {
+        mTask = task;
+    }
 
     @Override
-    protected Ad doInBackground(String... url){
-
+    protected Ad doInBackground(String... url) {
         URL urlObj;
         try {
             urlObj = new URL(url[0]);
@@ -46,31 +45,32 @@ public abstract class HttpAsyncTask extends AsyncTask<String, Void, Ad> {
             urlConnection = (HttpURLConnection) urlObj.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-            if(mTask==Task.GET_AD) {
+            if (mTask == Task.GET_AD) {
                 AdXmlHandler mXmlHandler = new AdXmlHandler();
                 SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
                 parser.parse(in, mXmlHandler);
                 Log.i("HTTP", "Response to [GET] " + url[0]);
                 Log.i("HTTP", "Success");
-                Ad ad = mXmlHandler.getParsedAd();
-                return ad;
+                return mXmlHandler.getParsedAd();
             }
 
-        } catch(SAXException saxException) {
+        } catch (SAXException saxException) {
             saxException.printStackTrace();
-        } catch(ParserConfigurationException parserException){
+        } catch (ParserConfigurationException parserException) {
             parserException.printStackTrace();
-        }catch(IOException ioException) {
+        } catch (IOException ioException) {
             ioException.printStackTrace();
-        }finally {
-            urlConnection.disconnect();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
 
         return null;
-
     }
 
 
+    protected enum Task {GET_AD, FIRE_PIXEL}
 
 
 }

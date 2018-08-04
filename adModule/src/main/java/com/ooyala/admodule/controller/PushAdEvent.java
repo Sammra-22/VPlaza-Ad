@@ -12,13 +12,11 @@ import com.ooyala.admodule.model.AdEvent;
  */
 public class PushAdEvent extends HttpAsyncTask {
 
+    private AdEvent mEvent;
+    private String mTrackerUrl;
+    private Context context;
 
-    AdEvent mEvent;
-    String mTrackerUrl;
-    Context context;
-
-
-    public PushAdEvent(Context context, String tracker, AdEvent event){
+    PushAdEvent(Context context, String tracker, AdEvent event) {
         this.context = context;
         mEvent = event;
         mTrackerUrl = tracker;
@@ -28,7 +26,7 @@ public class PushAdEvent extends HttpAsyncTask {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Toast.makeText(context, mEvent.getDisplayName()+" delivered", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, mEvent.getDisplayName() + " delivered", Toast.LENGTH_SHORT).show();
 
     }
 

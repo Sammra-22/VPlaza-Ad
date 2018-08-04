@@ -1,6 +1,7 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ooyala.admodule">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ooyala.admodule">
 
-    <application android:allowBackup="true" >
+    <application android:allowBackup="true">
 
     </application>
 

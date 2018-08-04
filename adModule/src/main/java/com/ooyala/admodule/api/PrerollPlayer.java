@@ -18,26 +18,24 @@ import com.ooyala.admodule.model.AdEvent;
  * Created by Sam22 on 6/17/15.
  */
 public class PrerollPlayer extends AdPlayer {
-    private static final String TAG = PrerollPlayer.class.getName();
-
-    enum State{INITIAL, AD_PLAYBACK, CONTENT_PLAYBACK}
-
     private int mResumePosition = 0;
     private String mContentPath = null;
     private Uri mContentUri = null;
     private Context context;
-
     private VideoView mVideoView;
     private State mState;
 
+    enum State {INITIAL, AD_PLAYBACK, CONTENT_PLAYBACK}
+
     /**
      * Player constructor -- Initialize the Preroll player
-     * @param context The Application context
-     * @param videoView The Video view intended to display the playback
+     *
+     * @param context     The Application context
+     * @param videoView   The Video view intended to display the playback
      * @param contentPath The path to the video content
-     * @param listener Callback for playback events
+     * @param listener    Callback for playback events
      */
-    public PrerollPlayer(@NonNull Context context, @NonNull VideoView videoView, @NonNull String contentPath, PlaybackListener listener){
+    public PrerollPlayer(@NonNull Context context, @NonNull VideoView videoView, @NonNull String contentPath, PlaybackListener listener) {
         super(context, listener);
         this.context = context;
         mVideoView = videoView;
@@ -47,12 +45,13 @@ public class PrerollPlayer extends AdPlayer {
 
     /**
      * Player constructor -- Initialize the Preroll player
-     * @param context The Application context
-     * @param videoView The Video view intended to display the playback
+     *
+     * @param context    The Application context
+     * @param videoView  The Video view intended to display the playback
      * @param contentUri The uri to the video content
-     * @param listener Callback for playback events
+     * @param listener   Callback for playback events
      */
-    public PrerollPlayer(@NonNull Context context, @NonNull VideoView videoView, @NonNull Uri contentUri, PlaybackListener listener){
+    public PrerollPlayer(@NonNull Context context, @NonNull VideoView videoView, @NonNull Uri contentUri, PlaybackListener listener) {
         super(context, listener);
         this.context = context;
         mVideoView = videoView;
@@ -61,41 +60,44 @@ public class PrerollPlayer extends AdPlayer {
     }
 
     @Override
-    public boolean isPlaying(){ return mVideoView.isPlaying();}
+    public boolean isPlaying() {
+        return mVideoView.isPlaying();
+    }
 
     @Override
-    public void play(){
+    public void play() {
         mVideoView.setOnPreparedListener(this);
         mVideoView.setOnTouchListener(this);
         mVideoView.setOnCompletionListener(this);
-        if(mState == State.INITIAL){
+        if (mState == State.INITIAL) {
             mState = State.AD_PLAYBACK;
             mPlayListener.onPlaybackLoadingStart();
-            if(mAdManager.getAd()!=null)
+            if (mAdManager.getAd() != null) {
                 mVideoView.setVideoPath(mAdManager.getAd().getMediaAssetUrl());
-            else{
+            } else {
                 mState = State.CONTENT_PLAYBACK;
-                if (mContentPath != null)
+                if (mContentPath != null) {
                     mVideoView.setVideoPath(mContentPath);
-                if (mContentUri != null)
+                }
+                if (mContentUri != null) {
                     mVideoView.setVideoURI(mContentUri);
+                }
             }
-        }else{
+        } else {
             mVideoView.seekTo(mResumePosition);
             mVideoView.start();
         }
     }
 
     @Override
-    public void pause(){
+    public void pause() {
         mResumePosition = mVideoView.getCurrentPosition();
         mVideoView.pause();
         mPlayListener.onPlaybackPaused();
     }
 
-
     @Override
-    public void stop(){
+    public void stop() {
         mState = State.INITIAL;
         mVideoView.stopPlayback();
     }
@@ -110,37 +112,38 @@ public class PrerollPlayer extends AdPlayer {
         return mVideoView.getCurrentPosition();
     }
 
-
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         mPlayListener.onPlaybackLoadingEnd();
-        if(mResumePosition>0) {
+        if (mResumePosition > 0) {
             mVideoView.seekTo(mResumePosition);
-        }else
+        } else {
             mVideoView.start();
+        }
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         mResumePosition = -1;
-        if(mState == State.AD_PLAYBACK) {
+        if (mState == State.AD_PLAYBACK) {
             mState = State.CONTENT_PLAYBACK;
             dispatchAdEvent(AdEvent.IMPRESSION, 1000);
             mPlayListener.onPlaybackLoadingStart();
-            if (mContentPath != null)
+            if (mContentPath != null) {
                 mVideoView.setVideoPath(mContentPath);
-            if (mContentUri != null)
+            }
+            if (mContentUri != null) {
                 mVideoView.setVideoURI(mContentUri);
-        }else {
+            }
+        } else {
             stop();
             mPlayListener.onCompleted();
         }
     }
 
-
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (mState){
+        switch (mState) {
             case CONTENT_PLAYBACK:
                 mPlayListener.onTouchDisplay();
                 break;
@@ -160,7 +163,7 @@ public class PrerollPlayer extends AdPlayer {
         return false;
     }
 
-    private void redirect(){
+    private void redirect() {
         Uri uri = Uri.parse(mAdManager.getAd().getClickUrl());
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -168,8 +171,8 @@ public class PrerollPlayer extends AdPlayer {
     }
 
     @Override
-    State getState(){return mState;}
-
-
+    State getState() {
+        return mState;
+    }
 
 }

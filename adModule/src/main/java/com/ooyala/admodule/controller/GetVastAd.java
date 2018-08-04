@@ -12,7 +12,7 @@ public class GetVastAd extends HttpAsyncTask {
 
     private AdListener mListener;
 
-    public GetVastAd(AdListener listener){
+    GetVastAd(AdListener listener) {
         this.mListener = listener;
         setTask(Task.GET_AD);
     }
@@ -20,12 +20,10 @@ public class GetVastAd extends HttpAsyncTask {
     @Override
     protected void onPostExecute(Ad ad) {
         super.onPostExecute(ad);
-        if(ad!=null && ad.isValid())
+        if (ad != null && ad.isValid()) {
             mListener.onAdReceived(ad);
-        else
+        } else {
             mListener.onAdFailure();
+        }
     }
-
-
-
 }

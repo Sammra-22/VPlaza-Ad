@@ -2,13 +2,11 @@ package com.ooyala.admodule.model;
 
 import android.text.TextUtils;
 
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,14 +16,14 @@ import java.util.Map;
  */
 public class Ad implements Serializable {
 
-    String name;
-    String id;
-    String mediaAssetUrl, clickThrough;
-    ArrayList<String> impressions;
-    Map<AdEvent, ArrayList<String>> eventTrackers;
+    private String name;
+    private String id;
+    private String mediaAssetUrl, clickThrough;
+    private ArrayList<String> impressions;
+    private Map<AdEvent, ArrayList<String>> eventTrackers;
 
     public Ad() {
-        name ="";
+        name = "";
         id = "";
         mediaAssetUrl = null;
         clickThrough = null;
@@ -33,47 +31,59 @@ public class Ad implements Serializable {
         impressions = new ArrayList<>();
     }
 
-    public void setName(String name){this.name = name;}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public void setId(String id){this.id = id;}
+    public void setMediaUrl(String mediaAssetUrl) {
+        this.mediaAssetUrl = mediaAssetUrl;
+    }
 
-    public void setMediaUrl(String mediaAssetUrl){this.mediaAssetUrl = mediaAssetUrl;}
-
-    public void setClickUrl(String clickThrough){this.clickThrough = clickThrough;}
-
-    public void setImpressionUrl(String impressionUrl){
+    public void setImpressionUrl(String impressionUrl) {
         this.impressions.add(impressionUrl);
     }
 
-    public void setTracker(String trackerUrl, AdEvent event){
+    public void setTracker(String trackerUrl, AdEvent event) {
         List<String> trackers = this.eventTrackers.get(event);
-        if(trackers!=null)
+        if (trackers != null)
             trackers.add(trackerUrl);
-        else{
-            ArrayList<String> t=new ArrayList<>();
+        else {
+            ArrayList<String> t = new ArrayList<>();
             t.add(trackerUrl);
             this.eventTrackers.put(event, t);
         }
 
     }
 
-    public boolean isValid(){
-        return (!TextUtils.isEmpty(mediaAssetUrl) && !impressions.isEmpty()) || eventTrackers.containsKey(AdEvent.ERROR) ;
+    public boolean isValid() {
+        return (!TextUtils.isEmpty(mediaAssetUrl) && !impressions.isEmpty()) || eventTrackers.containsKey(AdEvent.ERROR);
     }
 
     public String getId() {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public ArrayList<String> getTrackers(AdEvent event) {
-        if(event== AdEvent.IMPRESSION)
+        if (event == AdEvent.IMPRESSION)
             return impressions;
         return eventTrackers.get(event);
     }
 
-    public String getClickUrl(){return clickThrough;}
+    public String getClickUrl() {
+        return clickThrough;
+    }
 
-    public String getMediaAssetUrl(){return mediaAssetUrl;}
+    public void setClickUrl(String clickThrough) {
+        this.clickThrough = clickThrough;
+    }
+
+    public String getMediaAssetUrl() {
+        return mediaAssetUrl;
+    }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(id);
@@ -89,18 +99,14 @@ public class Ad implements Serializable {
         name = (String) stream.readObject();
         mediaAssetUrl = (String) stream.readObject();
         clickThrough = (String) stream.readObject();
-        eventTrackers = (HashMap<AdEvent,ArrayList<String>>) stream.readObject();
+        eventTrackers = (HashMap<AdEvent, ArrayList<String>>) stream.readObject();
         impressions = (ArrayList<String>) stream.readObject();
     }
 
 
-
     @Override
     public boolean equals(Object o) {
-        Ad ad = (Ad)o;
-        if(ad!=null && id == ad.id && name.equals(ad.name)){
-                return true;
-        }
-        return false;
+        Ad ad = (Ad) o;
+        return ad != null && id.equals(ad.id) && name.equals(ad.name);
     }
 }
